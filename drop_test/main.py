@@ -1,37 +1,31 @@
+from math import ceil, log2
 from pathlib import Path
 
 
 def min_number_of_drops(n: int, h: int) -> int:
-    # dp[devices][floors]
-    dp = [[0] * (h + 1) for _ in range(n + 1)]
+    if n >= ceil(log2(h + 1)):
+        return ceil(log2(h + 1))
 
-    for j in range(1, h + 1):
-        dp[1][j] = j
+    # dp[drops][devices]
+    dp = [[0] * (n + 1) for _ in range(h + 1)]
 
-    for i in range(2, n + 1):
-        for j in range(1, h + 1):
-            dp[i][j] = float("inf")
-            for x in range(1, j + 1):
-                breaks = dp[i - 1][x - 1]
-                survives = dp[i][j - x]
+    drops = 0
+    while dp[drops][n] < h:
+        drops += 1
+        for devices in range(1, n + 1):
+            # ellenőrizhető szintek -> szintek alatta (törik) + szintek felette (nem törik) + 1 (jelenlegi szint)
+            dp[drops][devices] = dp[drops - 1][devices - 1] + dp[drops - 1][devices] + 1
 
-                worst_case = 1 + max(breaks, survives)
-
-                if worst_case < dp[i][j]:
-                    dp[i][j] = worst_case
-
-    return dp[n][h]
+    return drops
 
 
 def main():
     data = Path("input.txt").read_text(encoding="utf-8")
 
     for line in data.splitlines():
-        n, h = line.split()
+        n, h = line.split(",")
         result = min_number_of_drops(int(n), int(h))
         print(result)
-
-    print(data, end="")
 
 
 if __name__ == "__main__":
