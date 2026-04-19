@@ -1,4 +1,4 @@
-from json import dump
+from json import dump, dumps
 from pathlib import Path
 
 
@@ -64,7 +64,7 @@ def main():
         dump(final_output, file, indent=4)
 
     # konzolra is ki kell írni, vagy csak json fájlba?
-    print(final_output)
+    print(dumps(final_output, indent=4, ensure_ascii=False))
 
 
 if __name__ == "__main__":
