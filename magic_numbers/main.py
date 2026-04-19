@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-def next_magic_number(n: int):
+def next_magic_number(n):
     n += 1
 
     while True:
@@ -14,7 +14,11 @@ def next_magic_number(n: int):
 
 def main():
     data = Path("input.txt").read_text(encoding="utf-8")
-    print(data, end="")
+
+    for line in data.splitlines():
+        n = int(line.strip())
+        magic_number = next_magic_number(n)
+        print(magic_number, end="")
 
 
 if __name__ == "__main__":
