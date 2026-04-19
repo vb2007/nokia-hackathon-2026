@@ -15,30 +15,20 @@ def next_magic_number(number: int) -> int:
     number_string = str(number)
     length = len(number_string)
 
-    # már magic number-e (stringként a megfordítás miatt)
-    if number_string == number_string[::-1]:
-        return number
+    # string fele: középső értékkel együtt, ha a a szám páratlan hosszú
+    half = number_string[: (length + 1) // 2]
 
-    is_odd = length % 2 != 0
-    half_length = length // 2
+    # palindrom készítése a bal oldal tükrözésével
+    # half[-2::-1] -> középső értéket tükrözi, ha páratlan
+    # half[::-1] -> megtartja a középső értéket, ha páros
+    candidate = int(half + (half[-2::-1] if length % 2 else half[::-1]))
 
-    left = number_string[:half_length]
-    middle = number_string[half_length] if is_odd else ""
+    if candidate >= number:
+        return candidate
 
-    mirrored = left + middle + left[::-1]
-
-    if int(mirrored) >= number:
-        return int(mirrored)
-
-    left_middle_value = int(left + middle) + 1
-    new_left_middle = str(left_middle_value)
-
-    if is_odd:
-        new_left = new_left_middle[:-1]
-        new_middle = new_left_middle[-1]
-        return int(new_left + new_middle + new_left[::-1])
-    else:
-        return int(new_left_middle + new_left_middle[::-1])
+    # ha kisebb volt "n"-nél, a bal oldalt 1-el növeli és újra tükröz
+    half = str(int(half) + 1)
+    return int(half + (half[-2::-1] if length % 2 else half[::-1]))
 
 
 def main():
