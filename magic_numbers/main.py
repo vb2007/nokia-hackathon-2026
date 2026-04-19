@@ -1,6 +1,17 @@
 from pathlib import Path
 
 
+def next_magic_number(n: int):
+    n += 1
+
+    while True:
+        s = str(n)
+        if s == s[::-1]:
+            return n
+        else:
+            n += 1
+
+
 def main():
     data = Path("input.txt").read_text(encoding="utf-8")
     print(data, end="")
