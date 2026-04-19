@@ -10,15 +10,35 @@ def parse_input(line: str) -> int:
     return int(line)
 
 
-def next_magic_number(n: int) -> int:
-    n += 1
+def next_magic_number(number: int) -> int:
+    number += 1
+    number_string = str(number)
+    length = len(number_string)
 
-    while True:
-        s = str(n)  # strnggé alakítás a fordított érték ellenőrzéséhez
+    # már magic number-e (stringként a megfordítás miatt)
+    if number_string == number_string[::-1]:
+        return number
 
-        if s == s[::-1]:
-            return int(n)
-        n += 1
+    is_odd = length % 2 != 0
+    half_length = length // 2
+
+    left = number_string[:half_length]
+    middle = number_string[half_length] if is_odd else ""
+
+    mirrored = left + middle + left[::-1]
+
+    if int(mirrored) >= number:
+        return int(mirrored)
+
+    left_middle_value = int(left + middle) + 1
+    new_left_middle = str(left_middle_value)
+
+    if is_odd:
+        new_left = new_left_middle[:-1]
+        new_middle = new_left_middle[-1]
+        return int(new_left + new_middle + new_left[::-1])
+    else:
+        return int(new_left_middle + new_left_middle[::-1])
 
 
 def main():
