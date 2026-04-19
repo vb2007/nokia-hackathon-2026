@@ -35,6 +35,30 @@ def calculate_fee(entry_str, exit_str):
     return int(round(total_fee))
 
 
+def process_data(data):
+    lines = data.strip().split("\n")
+    output_lines = ["RENDSZAM\tFIZETENDO"]
+    output_lines.append("=" * 30)
+
+    # 2 header átugrása
+    for line in lines[2:]:
+        if not line.strip():
+            continue
+        parts = line.split()
+        plate = parts[0]
+        entry = f"{parts[1]} {parts[2]}"
+        exit_t = f"{parts[3]} {parts[4]}"
+
+        fee = calculate_fee(entry, exit_t)
+
+        if isinstance(fee, int):
+            output_lines.append(f"{plate}\t\t{fee} Ft")
+        else:
+            output_lines.append(f"{plate}\t\t{fee}")
+
+    return "\n".join(output_lines) + "\n"
+
+
 def main():
     data = Path("input.txt").read_text(encoding="utf-8")
     print(data, end="")
