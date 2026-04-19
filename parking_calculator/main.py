@@ -2,10 +2,10 @@ from datetime import datetime
 from pathlib import Path
 
 
-def calculate_fee(entry_str, exit_str):
+def calculate_fee(entry: str, exit: str) -> int:
     fmt = "%Y-%m-%d %H:%M:%S"
-    entry_time = datetime.strptime(entry_str, fmt)
-    exit_time = datetime.strptime(exit_str, fmt)
+    entry_time = datetime.strptime(entry, fmt)
+    exit_time = datetime.strptime(exit, fmt)
 
     # teljes időtartam percekben
     duration_mins = (exit_time - entry_time).total_seconds() / 60
@@ -35,7 +35,7 @@ def calculate_fee(entry_str, exit_str):
     return int(round(total_fee))
 
 
-def process_data(data):
+def process_data(data: str) -> str:
     lines = data.strip().split("\n")
     output_lines = ["RENDSZAM\tFIZETENDO"]
     output_lines.append("=" * 30)
@@ -61,7 +61,8 @@ def process_data(data):
 
 def main():
     data = Path("input.txt").read_text(encoding="utf-8")
-    print(data, end="")
+    result = process_data(data)
+    print(result, end="")
 
 
 if __name__ == "__main__":
